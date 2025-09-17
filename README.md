@@ -4,7 +4,9 @@ A standalone desktop application in Java to automate the generation of academic 
 
 ## Overview
 
-This system allows department administrators to manage courses, lecturers, and venues, and to generate, view, and export conflict-free timetables. The application follows a structured System Development Life Cycle (SDLC) and an iterative development approach.
+This system allows department administrators to manage courses, lecturers, venues, and timeslots, and to generate, view, and export conflict-free timetables. The application follows a structured System Development Life Cycle (SDLC) and an iterative development approach.
+
+The application provides a complete solution for academic timetable management with a user-friendly graphical interface and robust data management capabilities.
 
 ## Technology Stack
 
@@ -15,35 +17,55 @@ This system allows department administrators to manage courses, lecturers, and v
 
 ## Core Functionality
 
-1. **Data Management:**
-   - Manage Courses: Add, update, and delete courses with attributes like ID, title, level (e.g., ND/HND), and lab requirements.
-   - Manage Lecturers: Add, update, and delete lecturers with attributes like ID, name, rank, and specified availability.
-   - Manage Venues: Add, update, and delete venues with attributes like ID, name, capacity, and type (e.g., lecture hall, lab).
+### 1. Data Management Modules
 
-2. **Timetable Generation:**
-   - Constraint Checking: The core algorithm prevents hard constraints from being violated:
-     - Double-booking a lecturer at the same time
-     - Double-booking a venue at the same time
-     - Assigning a course to a venue that does not meet its capacity or type
-     - Assigning a lecturer to a timeslot they are not available for
-   - Generation Algorithm: Implement a heuristic or greedy algorithm to generate the timetable
-   - Conflict Reporting: The system identifies and reports any unavoidable conflicts with suggested resolutions
+- **Lecturers Management**: Add, update, and delete lecturers with attributes like ID, name, and rank (Professor, Associate Professor, Assistant Professor, Lecturer).
+- **Courses Management**: Add, update, and delete courses with attributes like ID, title, level (ND/HND), and lab requirements.
+- **Venues Management**: Add, update, and delete venues with attributes like ID, name, capacity, and type (Lecture Hall or Lab).
+- **Timeslots Management**: Add, update, and delete timeslots with day of week and time range.
+- **Availability Management**: Define lecturer availability by linking lecturers to specific timeslots.
 
-3. **Viewing and Reporting:**
-   - View Timetable: Display generated timetables in a clear, tabular format
-   - Filtering: Allow users to filter the timetable by various criteria (e.g., by level, by lecturer)
-   - Export: Provide options to export the timetable in common formats like CSV or PDF
+### 2. Timetable Generation
+
+- **Constraint Checking**: The core algorithm prevents hard constraints from being violated:
+  - Double-booking a lecturer at the same time
+  - Double-booking a venue at the same time
+  - Assigning a course to a venue that does not meet its capacity or type requirements
+  - Assigning a lecturer to a timeslot they are not available for
+- **Generation Algorithm**: Implementation of a greedy algorithm to generate timetables
+- **Conflict Reporting**: The system identifies and reports any unavoidable conflicts with suggested resolutions
+
+### 3. Viewing and Reporting
+
+- **Timetable Display**: View generated timetables in a clear, tabular format organized by days and time slots
+- **Export Functionality**: Export timetables to common formats (CSV export functionality is implemented as a placeholder)
 
 ## System Architecture & Design
 
-- **Architecture:** Three-layer architecture:
-  1. Presentation Layer: The Java Swing GUI
-  2. Application Logic Layer: Java core classes containing the scheduling algorithm and business rules
-  3. Database Layer: The JDBC layer for data access and persistence
+### Architecture
 
-- **Data Model:** The database schema is designed with the following key entities and their relationships: `Lecturer`, `Course`, `Venue`, `Timeslot`, `TimetableEntry`, and `Availability`.
+The application follows a three-layer architecture:
+1. **Presentation Layer**: Java Swing GUI providing an intuitive interface for non-technical users
+2. **Application Logic Layer**: Java core classes containing the scheduling algorithm and business rules
+3. **Database Layer**: JDBC layer for data access and persistence
 
-- **User Interface:** The GUI is intuitive for non-technical users, featuring a left-hand navigation menu for different modules, with the main content area using sortable and searchable tables for data entry and display.
+### Data Model
+
+The database schema is designed with the following key entities and their relationships:
+- `Lecturer`: Represents teaching staff with their attributes
+- `Course`: Represents academic courses with their requirements
+- `Venue`: Represents classrooms and labs with capacity and type
+- `Timeslot`: Represents time periods when classes can be scheduled
+- `Availability`: Links lecturers to timeslots they are available
+- `TimetableEntry`: Represents scheduled classes linking courses, lecturers, venues, and timeslots
+
+### User Interface
+
+The GUI features:
+- Left-hand navigation menu for accessing different modules
+- Main content area with forms for data entry
+- Tabular views for displaying records with sortable and searchable tables
+- Intuitive design for non-technical users
 
 ## Project Structure
 
@@ -53,7 +75,13 @@ src/
 │   ├── java/
 │   │   └── com/timetable/system/
 │   │       ├── gui/
-│   │       │   └── MainWindow.java
+│   │       │   ├── MainWindow.java
+│   │       │   ├── LecturerPanel.java
+│   │       │   ├── CoursePanel.java
+│   │       │   ├── VenuePanel.java
+│   │       │   ├── TimeslotPanel.java
+│   │       │   ├── AvailabilityPanel.java
+│   │       │   └── TimetablePanel.java
 │   │       ├── BaseEntity.java
 │   │       ├── Course.java
 │   │       ├── CourseDAO.java
@@ -73,7 +101,8 @@ src/
 │   │       └── VenueDAO.java
 │   └── resources/
 │       ├── database.properties
-│       └── schema.sql
+│       ├── schema.sql
+│       └── schema-mysql.sql
 └── test/
     └── java/
 ```
@@ -82,25 +111,53 @@ src/
 
 See [BUILDING.md](BUILDING.md) for detailed instructions on how to build and run the application.
 
+### Quick Start
+
+1. **Build the application**:
+   ```bash
+   ./build.sh
+   ```
+
+2. **Run the application**:
+   ```bash
+   ./run.sh
+   ```
+
 ## Database Configuration
 
-The application supports both SQLite and MySQL databases. By default, it uses SQLite for simplicity.
+The application supports both SQLite and MySQL databases.
 
-To configure the database:
+### SQLite Configuration (Default)
+
+SQLite is the default database for simplicity and portability:
+1. The application automatically creates a `timetable.db` file in the project directory
+2. No additional setup is required
+
+### MySQL Configuration
+
+To use MySQL instead of SQLite:
 
 1. Open `src/main/resources/database.properties`
-2. For SQLite (default), ensure these lines are uncommented:
+2. Comment the SQLite lines and uncomment/modify these lines:
    ```
-   db.url=jdbc:sqlite:timetable.db
-   db.user=
-   db.password=
+   db.url=jdbc:mysql://localhost:3306/timetable
+   db.user=your_username
+   db.password=your_password
    ```
-3. For MySQL, comment the SQLite lines and uncomment/modify these lines:
-   ```
-   # db.url=jdbc:mysql://localhost:3306/timetable
-   # db.user=root
-   # db.password=password
-   ```
+3. Make sure you have a MySQL server running and a database named `timetable` created
+
+## Features Implemented
+
+All core modules have been implemented with full CRUD (Create, Read, Update, Delete) operations:
+
+- [x] Lecturer Management
+- [x] Course Management
+- [x] Venue Management
+- [x] Timeslot Management
+- [x] Lecturer Availability Management
+- [x] Timetable Generation
+- [x] Timetable Viewing
+- [x] Export Functionality (Placeholder)
 
 ## Contributing
 

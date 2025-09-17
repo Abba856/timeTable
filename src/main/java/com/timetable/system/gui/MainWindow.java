@@ -41,10 +41,15 @@ public class MainWindow extends JFrame {
         // Create the navigation panel
         JPanel navigationPanel = createNavigationPanel();
         
+        // Create attribution panel
+        JPanel attributionPanel = new JPanel();
+        attributionPanel.add(new JLabel("Developed by Rukayya Bello Abubakar With Matric HND/SWD/23/00"));
+        
         // Add components to the main window
         setLayout(new BorderLayout());
         add(navigationPanel, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
+        add(attributionPanel, BorderLayout.SOUTH);
     }
     
     /**

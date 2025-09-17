@@ -123,6 +123,10 @@ See [BUILDING.md](BUILDING.md) for detailed instructions on how to build and run
    ./run.sh
    ```
 
+### Running on Windows
+
+For detailed instructions on running the application on Windows, see [Windows Installation Guide](docs/install_Windows.md).
+
 ## Database Configuration
 
 The application supports both SQLite and MySQL databases.

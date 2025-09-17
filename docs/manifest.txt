@@ -1,0 +1,2 @@
+Main-Class: com.timetable.system.TimetableApplication
+Class-Path: lib/sqlite-jdbc-3.36.0.3.jar

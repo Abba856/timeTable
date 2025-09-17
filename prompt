@@ -1,0 +1,46 @@
+### **Project Title**
+**Automated Timetable Generation System**
+
+---
+
+### **Overview**
+Develop a standalone desktop application in Java to automate the generation of academic timetables. The system must be usable by department administrators to manage courses, lecturers, and venues and to generate, view, and export conflict-free timetables. The application will follow a structured System Development Life Cycle (SDLC) and an iterative development approach.
+
+---
+
+### **Technology Stack**
+* **Language:** Java
+* **GUI:** Java Swing (or JavaFX, if preferred) for a rich desktop experience.
+* **Data Persistence:** JDBC for database connectivity.
+* **Database:** Support for either **SQLite** (lightweight, embedded) or **MySQL** (for a multi-user, server-based option).
+
+---
+
+### **Core Functionality (Functional Requirements)**
+The system must be able to perform the following key functions:
+1.  **Data Management:**
+    * **Manage Courses:** Add, update, and delete courses with attributes like ID, title, level (e.g., ND/HND), and lab requirements.
+    * **Manage Lecturers:** Add, update, and delete lecturers with attributes like ID, name, rank, and specified availability.
+    * **Manage Venues:** Add, update, and delete venues with attributes like ID, name, capacity, and type (e.g., lecture hall, lab).
+2.  **Timetable Generation:**
+    * **Constraint Checking:** The core algorithm must prevent **hard constraints** from being violated, such as:
+        * Double-booking a lecturer at the same time.
+        * Double-booking a venue at the same time.
+        * Assigning a course to a venue that does not meet its capacity or type (e.g., a non-lab venue for a lab-required course).
+        * Assigning a lecturer to a timeslot they are not available for.
+    * **Generation Algorithm:** Implement a heuristic or greedy algorithm to generate the timetable. The algorithm should prioritize satisfying all hard constraints.
+    * **Conflict Reporting:** The system must identify and report any unavoidable conflicts with suggested resolutions.
+3.  **Viewing and Reporting:**
+    * **View Timetable:** Display generated timetables in a clear, tabular format.
+    * **Filtering:** Allow users to filter the timetable by various criteria (e.g., by level, by lecturer).
+    * **Export:** Provide options to export the timetable in common formats like CSV or PDF.
+
+---
+
+### **System Architecture & Design**
+* **Architecture:** Use a **three-layer architecture**:
+    1.  **Presentation Layer:** The Java Swing GUI.
+    2.  **Application Logic Layer:** Java core classes containing the scheduling algorithm and business rules.
+    3.  **Database Layer:** The JDBC layer for data access and persistence.
+* **Data Model:** The database schema must be designed with the following key entities and their relationships: `Lecturer`, `Course`, `Venue`, `Timeslot`, and `TimetableEntry`. Include an `Availability` table to manage lecturer availability efficiently.
+* **User Interface:** The GUI should be intuitive for non-technical users. It should feature a left-hand navigation menu for different modules, with the main content area using sortable and searchable tables for data entry and display.
